@@ -1,0 +1,29 @@
+{
+  "name": "villa.js",
+  "version": "1.0.0",
+  "description": "Villa js is an open source home automation package for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dustinaevans/villa.js.git"
+  },
+  "keywords": [
+    "home",
+    "automation",
+    "node",
+    "js",
+    "node.js"
+  ],
+  "author": "Dustin Evans",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dustinaevans/villa.js/issues"
+  },
+  "homepage": "https://github.com/dustinaevans/villa.js#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
