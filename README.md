@@ -1,6 +1,7 @@
 #Villa.js
 
 ### Task List
-- [] Work for this.self
-- [] Get ```javascript var happy = this.drink(coffee);```
-- [] Build Villa.js module
+- [] Work for self
+- [] Get ```var happy = this.drink(coffee);```
+- [x] Start Villa.js module
+- [] Complete Villa.js module
