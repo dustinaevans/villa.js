@@ -18,6 +18,14 @@ admin.use(express.static('admin'));
 
 app.use(express.static('app'));
 
+app.get('/users', function (req, res) {
+    console.log('get request to root');
+});
+
+app.post('/users', function (req, res) {
+    console.log('post request to root');
+});
+
 var client = app.listen(8001, function () {
     var host = client.address().address
     var port = client.address().port
