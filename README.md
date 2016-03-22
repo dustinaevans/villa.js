@@ -2,5 +2,5 @@
 
 ### Task List
 - [] Work for this.self
-- [] Get ```CoffeeScript var happy = this.drink(coffee);```
+- [] Get ```javascript var happy = this.drink(coffee);```
 - [] Build Villa.js module
