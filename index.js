@@ -1,31 +1,22 @@
+//Requires
+var self = this;
 var express = require('express');
+var Firebase = require('firebase');
+var bodyParser = require('body-parser');
+const EventEmiter = require('events');
+
+//variables
 var app = express();
 var admin = express();
-
-var Firebase = require('firebase');
-
 var firebaseRef = new Firebase('https://wptc.firebaseio.com/');
+var myEmiter = new EventEmiter();
 
-var self = this;
-
-function getUsers() {
-    firebaseRef.child('users').on('value', function (snapshot) {
-        console.log(snapshot.val());
-    });
-};
-
+//static serve
 admin.use(express.static('admin'));
-
 app.use(express.static('app'));
 
-app.get('/users', function (req, res) {
-    console.log('get request to root');
-});
 
-app.post('/users', function (req, res) {
-    console.log('post request to root');
-});
-
+//listeners
 var client = app.listen(8001, function () {
     var host = client.address().address
     var port = client.address().port
@@ -36,4 +27,22 @@ var admin = admin.listen(8002, function () {
     var adminH = admin.address().address
     var adminP = admin.address().port
     console.log("Admin application listening at http://%s:%s", adminH, adminP);
+});
+
+
+//routes
+app.get('/users', function (req, res) {
+    console.log('get request to root');
+});
+
+app.post('/users', function (req, res) {
+    myEmiter.emit('postEvent', req);
+    console.log(JSON.stringify(req.body));
+});
+
+
+// Events
+myEmiter.on('postEvent', (req) => {
+    console.log("Post event called.");
+
 });
