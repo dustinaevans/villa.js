@@ -12,13 +12,14 @@ var myEmiter = new EventEmiter();
 
 var id = "0001";
 
-var state = {
-    address: id
-};
-
 var client = app.listen(8003, function () {
     console.log("Client listening at 8003");
 });
+
+var state = {
+    address: id,
+    ip: client.address().address
+};
 
 app.get('/power', function (req, res) {
     res.send(state);

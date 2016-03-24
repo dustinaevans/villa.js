@@ -17,16 +17,18 @@ firebaseRef.authAnonymously(function (error, authData) {
     if (error) {
         console.log("Authentication Failed!", error);
     } else {
-        console.log("Authenticated successfully with payload:", authData);
+        console.log("Authenticated successfully");
     }
 });
 
 //initialize clients
 function getSnapshot() {
     firebaseRef.child('clients').on('value', function (snapshot) {
-            //clients = JSON.parse(JSON.stringify(snapshot.val()));
-            return snapshot.val();
+            clients = snapshot.val();
+            console.log("getSnapshot()");
             console.log(clients);
+            return snapshot.val();
+
         }),
         function (errorObject) {
             console.log(errorObject);
@@ -79,16 +81,15 @@ myEmiter.on('postEvent', () => {
 });
 
 myEmiter.on('clientAliveEvent', function (clientObj) {
-    var tempSnapshot = getSnapshot();
+    console.log("clientAliveEvent {");
     console.log("client " + clientObj.address + " is alive.")
-    clients.address = clientObj.address;
     var fbDate = Firebase.ServerValue.TIMESTAMP;
     var thisClient = {
-        lastCheckin: fbDate
+        lastCheckin: fbDate,
+        ip: clientObj.ip
     };
-    console.log(thisClient);
     firebaseRef.child('clients/' + clientObj.address).update(thisClient);
-
+    console.log("}\n")
 });
 
 
