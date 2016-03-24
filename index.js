@@ -75,7 +75,7 @@ app.post('/clients/power', function (req, res) {
 
 
 // Events
-myEmiter.on('postEvent', () => {
+myEmiter.on('postEvent', function () {
     console.log("Post event called.");
 
 });
