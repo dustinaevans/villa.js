@@ -68,6 +68,7 @@ app.post('/users', function (req, res) {
 
 app.post('/clients/power', function (req, res) {
     var clientObj = req.body;
+    clientObj.ip = req.connection.remoteAddress;
     myEmiter.emit('clientAliveEvent', clientObj);
     res.statusCode = 200;
     res.send('ok');

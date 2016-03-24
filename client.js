@@ -21,13 +21,15 @@ var state = {
     ip: client.address().address
 };
 
+console.log(state);
+
 app.get('/power', function (req, res) {
     res.send(state);
 });
 
 var checkIn = function () {
     request({
-        url: 'http://localhost:8001/clients/power',
+        url: 'http://10.254.1.2:8001/clients/power',
         method: 'POST',
         json: state
     }, function (error, response, body) {
@@ -42,5 +44,3 @@ var checkIn = function () {
         }
     });
 };
-
-setInterval(checkIn, 10000);
