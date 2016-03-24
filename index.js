@@ -8,10 +8,30 @@ const EventEmiter = require('events');
 //variables
 var app = express();
 var admin = express();
-var firebaseRef = new Firebase('https://wptc.firebaseio.com/');
+var firebaseRef = new Firebase('https://villajs.firebaseio.com');
 var myEmiter = new EventEmiter();
 var clients = {};
 
+//anonymous auth
+firebaseRef.authAnonymously(function (error, authData) {
+    if (error) {
+        console.log("Authentication Failed!", error);
+    } else {
+        console.log("Authenticated successfully with payload:", authData);
+    }
+});
+
+//initialize clients
+function getSnapshot() {
+    firebaseRef.child('clients').on('value', function (snapshot) {
+            //clients = JSON.parse(JSON.stringify(snapshot.val()));
+            return snapshot.val();
+            console.log(clients);
+        }),
+        function (errorObject) {
+            console.log(errorObject);
+        };
+};
 //static serve
 admin.use(express.static('admin'));
 app.use(express.static('app'));
@@ -42,12 +62,10 @@ app.get('/users', function (req, res) {
 
 app.post('/users', function (req, res) {
     myEmiter.emit('postEvent');
-    console.log(JSON.stringify(req.body, null, 2));
-    res.send(JSON.stringify(req.body, null, 2));
 });
 
 app.post('/clients/power', function (req, res) {
-    var clientObj = JSON.stringify(req.body, null, 2);
+    var clientObj = req.body;
     myEmiter.emit('clientAliveEvent', clientObj);
     res.statusCode = 200;
     res.send('ok');
@@ -60,10 +78,21 @@ myEmiter.on('postEvent', () => {
 
 });
 
-myEmiter.on('clientAliveEvent', (clientObj) => {
+myEmiter.on('clientAliveEvent', function (clientObj) {
+    var tempSnapshot = getSnapshot();
     console.log("client " + clientObj.address + " is alive.")
     clients.address = clientObj.address;
+    var fbDate = Firebase.ServerValue.TIMESTAMP;
+    var thisClient = {
+        lastCheckin: fbDate
+    };
+    console.log(thisClient);
+    firebaseRef.child('clients/' + clientObj.address).update(thisClient);
+
 });
+
+
+
 
 ////Load the request module
 //var request = require('request');

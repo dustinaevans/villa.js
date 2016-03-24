@@ -26,7 +26,7 @@ app.get('/power', function (req, res) {
 
 var checkIn = function () {
     request({
-        url: 'http://192.168.0.139:8001/clients/power',
+        url: 'http://localhost:8001/clients/power',
         method: 'POST',
         json: state
     }, function (error, response, body) {
@@ -42,4 +42,4 @@ var checkIn = function () {
     });
 };
 
-setInterval(checkIn, 5000);
+setInterval(checkIn, 10000);
