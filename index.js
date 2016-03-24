@@ -10,7 +10,7 @@ var app = express();
 var admin = express();
 var firebaseRef = new Firebase('https://villajs.firebaseio.com');
 var myEmiter = new EventEmiter();
-var clients = {};
+var workers = {};
 
 //anonymous auth
 firebaseRef.authAnonymously(function (error, authData) {
@@ -21,12 +21,12 @@ firebaseRef.authAnonymously(function (error, authData) {
     }
 });
 
-//initialize clients
+//initialize workers database
 function getSnapshot() {
-    firebaseRef.child('clients').on('value', function (snapshot) {
-            clients = snapshot.val();
+    firebaseRef.child('workers').on('value', function (snapshot) {
+            workers = snapshot.val();
             console.log("getSnapshot()");
-            console.log(clients);
+            console.log(workers);
             return snapshot.val();
 
         }),
@@ -66,7 +66,7 @@ app.post('/users', function (req, res) {
     myEmiter.emit('postEvent');
 });
 
-app.post('/clients/power', function (req, res) {
+app.post('/workers/power', function (req, res) {
     var clientObj = req.body;
     clientObj.ip = req.connection.remoteAddress;
     myEmiter.emit('clientAliveEvent', clientObj);
@@ -89,7 +89,7 @@ myEmiter.on('clientAliveEvent', function (clientObj) {
         lastCheckin: fbDate,
         ip: clientObj.ip
     };
-    firebaseRef.child('clients/' + clientObj.address).update(thisClient);
+    firebaseRef.child('workers/' + clientObj.address).update(thisClient);
     console.log("}\n")
 });
 

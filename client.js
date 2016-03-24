@@ -12,13 +12,13 @@ var myEmiter = new EventEmiter();
 
 var id = "0001";
 
-var client = app.listen(8003, function () {
-    console.log("Client listening at 8003");
+var worker = app.listen(8003, function () {
+    console.log("Worker listening at 8003");
 });
 
 var state = {
     address: id,
-    ip: client.address().address
+    ip: worker.address().address
 };
 
 console.log(state);
@@ -29,7 +29,7 @@ app.get('/power', function (req, res) {
 
 var checkIn = function () {
     request({
-        url: 'http://10.254.1.2:8001/clients/power',
+        url: 'http://10.254.1.2:8001/workers/power',
         method: 'POST',
         json: state
     }, function (error, response, body) {
