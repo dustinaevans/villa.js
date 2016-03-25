@@ -4,11 +4,49 @@ var Firebase = require('firebase');
 var bodyParser = require('body-parser');
 var request = require('request');
 const EventEmiter = require('events');
+var fs = require('fs');
+var five = require('johnny-five');
+var board = new five.Board();
+
 
 var app = express();
 var admin = express();
-var firebaseRef = new Firebase('https://wptc.firebaseio.com/');
 var myEmiter = new EventEmiter();
+
+board.on("ready", function () {
+    // Create an Led on pin 13
+    var strobe = new five.Pin(13);
+    var state = 0x00;
+
+    strobe.write(state ^= 0x01);
+
+
+    var motion = new five.Motion({
+        pin: 12
+    });
+    // "calibrated" occurs once, at the beginning of a session,
+    motion.on("calibrated", function () {
+        console.log("calibrated");
+    });
+
+    // "motionstart" events are fired when the "calibrated"
+    // proximal area is disrupted, generally by some form of movement
+    motion.on("motionstart", function () {
+        console.log("motionstart");
+        request('http://127.0.0.1:8001/workers/motion?zone=1', function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log(body); // Show the HTML for the Modulus homepage.
+            }
+        });
+    });
+
+
+    // "motionend" events are fired following a "motionstart" event
+    // when no movement has occurred in X ms
+    motion.on("motionend", function () {
+
+    });
+});
 
 var id = "0001";
 
@@ -29,7 +67,7 @@ app.get('/power', function (req, res) {
 
 var checkIn = function () {
     request({
-        url: 'http://10.254.1.2:8001/workers/power',
+        url: 'http://127.0.0.1:8001/workers/power',
         method: 'POST',
         json: state
     }, function (error, response, body) {
@@ -44,3 +82,4 @@ var checkIn = function () {
         }
     });
 };
+setInterval(checkIn, 5000);

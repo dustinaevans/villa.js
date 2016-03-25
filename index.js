@@ -34,6 +34,11 @@ function getSnapshot() {
             console.log(errorObject);
         };
 };
+
+//mongoose.connect('mongodb://172.16.1.120/villajs');
+
+//var db = mongoose.connection;
+
 //static serve
 admin.use(express.static('admin'));
 app.use(express.static('app'));
@@ -65,6 +70,13 @@ app.get('/users', function (req, res) {
 app.post('/users', function (req, res) {
     myEmiter.emit('postEvent');
 });
+
+app.get('/workers/motion/', function (req, res) {
+    var query = req.query;
+    var zone = query.zone;
+
+    console.log("motion detected at zone: " + zone);
+})
 
 app.post('/workers/power', function (req, res) {
     var clientObj = req.body;
