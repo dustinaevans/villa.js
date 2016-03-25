@@ -1,3 +1,5 @@
+var baseUrl = "http://172.16.1.120:8001"
+
 var self = this;
 var express = require('express');
 var Firebase = require('firebase');
@@ -33,7 +35,7 @@ board.on("ready", function () {
     // proximal area is disrupted, generally by some form of movement
     motion.on("motionstart", function () {
         console.log("motionstart");
-        request('http://127.0.0.1:8001/workers/motion?zone=1', function (error, response, body) {
+        request(baseUrl + '/workers/motion?zone=1', function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 console.log(body); // Show the HTML for the Modulus homepage.
             }
@@ -67,7 +69,7 @@ app.get('/power', function (req, res) {
 
 var checkIn = function () {
     request({
-        url: 'http://127.0.0.1:8001/workers/power',
+        url: baseUrl + '/workers/power',
         method: 'POST',
         json: state
     }, function (error, response, body) {

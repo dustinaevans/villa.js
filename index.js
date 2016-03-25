@@ -75,7 +75,8 @@ app.get('/workers/motion/', function (req, res) {
     var query = req.query;
     var zone = query.zone;
 
-    console.log("motion detected at zone: " + zone);
+    console.log(new Date().toLocaleString() +
+        "  :  Motion detected at zone: " + zone);
 })
 
 app.post('/workers/power', function (req, res) {
