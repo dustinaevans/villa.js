@@ -95,7 +95,7 @@ myEmiter.on('postEvent', function () {
 });
 
 myEmiter.on('clientAliveEvent', function (clientObj) {
-    console.log(new Date().toLocaleDateString + "  :  client " + clientObj.address + " is alive.")
+    console.log(new Date().toLocaleDateString() + "  :  client " + clientObj.address + " is alive.")
     var fbDate = Firebase.ServerValue.TIMESTAMP;
     var thisClient = {
         lastCheckin: fbDate,
