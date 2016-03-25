@@ -95,15 +95,13 @@ myEmiter.on('postEvent', function () {
 });
 
 myEmiter.on('clientAliveEvent', function (clientObj) {
-    console.log("clientAliveEvent {");
-    console.log("client " + clientObj.address + " is alive.")
+    console.log(new Date().toLocaleDateString + "  :  client " + clientObj.address + " is alive.")
     var fbDate = Firebase.ServerValue.TIMESTAMP;
     var thisClient = {
         lastCheckin: fbDate,
         ip: clientObj.ip
     };
-    firebaseRef.child('workers/' + clientObj.address).update(thisClient);
-    console.log("}\n")
+    //firebaseRef.child('workers/' + clientObj.address).update(thisClient);
 });
 
 
