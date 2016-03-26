@@ -84,4 +84,4 @@ var checkIn = function () {
         }
     });
 };
-setInterval(checkIn, 10000);
+setInterval(checkIn, 60000);
