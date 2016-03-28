@@ -4,13 +4,16 @@ var express = require('express');
 var Firebase = require('firebase');
 var bodyParser = require('body-parser');
 const EventEmiter = require('events');
+var config = require('./config');
+var crypto = require('crypto');
 
 //variables
 var app = express();
 var admin = express();
-var firebaseRef = new Firebase('https://villajs.firebaseio.com');
+var firebaseRef = new Firebase(config.firebaseUrl);
 var myEmiter = new EventEmiter();
 var workers = {};
+var decryptedMessage = "";
 
 //anonymous auth
 firebaseRef.authAnonymously(function (error, authData) {
@@ -79,9 +82,13 @@ app.get('/workers/motion/', function (req, res) {
         "  :  Motion detected at zone: " + zone);
 })
 
-app.post('/workers/power', function (req, res) {
-    var clientObj = req.body;
-    clientObj.ip = req.connection.remoteAddress;
+app.get('/workers/power', function (req, res) {
+    var query = req.query;
+    var data = query.data;
+    var decrypted = decrypt(data);
+    var clientObj = JSON.parse(decrypt(query.data));
+    //console.log("clientObj: " + clientObj);
+    clientObj.ip = "10.10.10.10"; //req.connection.remoteAddress;
     myEmiter.emit('clientAliveEvent', clientObj);
     res.statusCode = 200;
     res.send('ok');
@@ -104,8 +111,21 @@ myEmiter.on('clientAliveEvent', function (clientObj) {
     //firebaseRef.child('workers/' + clientObj.address).update(thisClient);
 });
 
+//functions
+var encrypt = function (str) {
+    var cipher = crypto.createCipher('aes256', config.cryptKey);
+    var encrypted = cipher.update(str, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
+}
 
-
+var decrypt = function (str) {
+    var decipher = crypto.createDecipher('aes256', config.cryptKey);
+    var decrypted = decipher.update(str, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    //console.log(typeof decrypted);
+    return decrypted;
+}
 
 ////Load the request module
 //var request = require('request');
