@@ -13,7 +13,6 @@ var admin = express();
 var firebaseRef = new Firebase(config.firebaseUrl);
 var myEmiter = new EventEmiter();
 var workers = {};
-var decryptedMessage = "";
 
 //anonymous auth
 firebaseRef.authAnonymously(function (error, authData) {
