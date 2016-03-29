@@ -54,16 +54,16 @@ var myEmiter = new EventEmiter();
 //    });
 //});
 
-var id = "0001";
-
 var worker = app.listen(8003, function () {
     console.log("Worker listening at 8003");
 });
 
 var state = {
-    address: id,
+    address: config.id,
     ip: "10.10.10.10"
 };
+
+var villaState = {};
 
 console.log(state);
 
@@ -93,6 +93,24 @@ var checkIn = function () {
             }
         }
     });
+    request({
+        url: baseUrl + '/villa/state',
+        method: 'GET',
+        qs: "12345"
+    }, function (error, response, body) {
+        if (error) {
+            console.log(error);
+        } else {
+            if (response.statusCode != 404) {
+                console.log(body)
+                self.villaState = decrypt(body);
+                console.log(self.villaState)
+            } else {
+                console.log(response.statusCode);
+            }
+        }
+    });
+
 };
 
 var encrypt = function (str) {
@@ -107,6 +125,7 @@ function decrypt(str) {
     const decipher = crypto.createDecipher('aes256', config.cryptKey);
     var decrypted = decipher.update(str, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
+    return decrypted;
 }
 
 setInterval(checkIn, 5000);

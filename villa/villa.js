@@ -6,6 +6,13 @@ var bodyParser = require('body-parser');
 const EventEmiter = require('events');
 var config = require('./config');
 var crypto = require('crypto');
+var later = require('later');
+var fs = require('fs');
+
+var state = {
+    armed: false,
+    away: true
+}
 
 //variables
 var app = express();
@@ -14,6 +21,9 @@ var firebaseRef = new Firebase(config.firebaseUrl);
 var myEmiter = new EventEmiter();
 var workers = {};
 var decryptedMessage = "";
+later.date.localTime();
+var sched = later.parse.text("at 5:00pm every day");
+//console.log(later.schedule(sched).next(10));
 
 //anonymous auth
 firebaseRef.authAnonymously(function (error, authData) {
@@ -94,6 +104,18 @@ app.get('/workers/power', function (req, res) {
     res.send('ok');
 });
 
+app.get('/app/message', function (req, res) {
+    var query = req.query;
+    res.statusCode = 200;
+    res.send('ok');
+});
+
+app.get('/villa/state', function (req, res) {
+    res.statusCode = 200;
+    var encState = encrypt(JSON.stringify(state));
+    res.send(encState);
+});
+
 
 // Events
 myEmiter.on('postEvent', function () {
@@ -126,24 +148,3 @@ var decrypt = function (str) {
     //console.log(typeof decrypted);
     return decrypted;
 }
-
-////Load the request module
-//var request = require('request');
-//
-////Lets configure and request
-//request({
-//    url: 'https://modulus.io/contact/demo', //URL to hit
-//    qs: {from: 'blog example', time: +new Date()}, //Query string data
-//    method: 'POST',
-//    headers: {
-//        'Content-Type': 'MyContentType',
-//        'Custom-Header': 'Custom Value'
-//    },
-//    body: 'Hello Hello! String body!' //Set the body as a string
-//}, function(error, response, body){
-//    if(error) {
-//        console.log(error);
-//    } else {
-//        console.log(response.statusCode, body);
-//    }
-//});
