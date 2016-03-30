@@ -5,15 +5,15 @@ module.exports = function () {
     var bodyParser = require('body-parser');
     var passport = require('passport');
     var LocalStrategy = require('passport-local').Strategy;
-    var dbConfig = require('./db.js');
     var User = require('./user');
     var mongoose = require('mongoose');
     var flash = require('express-flash');
     var expressSession = require('express-session');
     var fs = require('fs');
     var path = require("path");
+    var config = require('./config');
 
-    mongoose.connect(dbConfig.url);
+    mongoose.connect("mongodb://" + config.dbAddress + "/" + config.database);
 
     //variables
     var app = express();
