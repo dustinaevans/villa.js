@@ -34,8 +34,8 @@ Worker 1 detects motion and posts a JSON object that models a motion event to Vi
 ```json
 {
     event:{
-        type:'motion',
-        worker:'0001'
+        type:"motion",
+        worker:"0001"
     }
 }
 ```
