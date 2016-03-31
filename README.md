@@ -41,8 +41,8 @@ Worker 1 detects motion and posts a JSON object that models a motion event to Vi
 ```
 Villa then takes some action based on this event.
     
-*Log the event to the terminal and log file
-*Send an event to another worker
+-Log the event to the terminal and log file
+-Send an event to another worker
     *Possibly sound an alarm and flash a light
 
 ###API
