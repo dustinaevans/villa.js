@@ -14,4 +14,34 @@ for the application to be worth using.
 
 ##Documentation
 
+##How it works
+>This section will change
+
+At the moment, there are two pieces to this puzzle.
+1. Villa
+2. Workers
+
+Villa is the "brain" of this project.
+Workers send/get information and events from Villa
+
+Villa is ignorant of the way that workers do their jobs.
+
+Example:
+Wokrer 1 is a machine \(Raspberry-pi, PC, etc.)\ connected to some type of motion detection hardware.
+>In my test case, I used an Arduino with Johnny-five and a PC.
+
+Worker 1 detects motion and posts a JSON object that models a motion event to Villa
+```json
+{
+    event:{
+        type:'motion',
+        worker:'0001'
+    }
+}
+```
+Villa then takes some action based on this event.
+    *Log the event to the terminal and log file
+    *Send an event to another worker
+        *Possibly sound an alarm and flash a light
+
 ###API
