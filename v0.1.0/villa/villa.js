@@ -39,62 +39,6 @@ function getSnapshot() {
         };
 };
 
-//mongoose.connect('mongodb://172.16.1.120/villajs');
-
-//var db = mongoose.connection;
-
-//static serve
-admin.use(express.static('admin'));
-app.use(express.static('app'));
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
-app.use(bodyParser.json());
-
-
-//listeners
-var server = app.listen(config.appPort, function () {
-    var host = server.address().address
-    var port = server.address().port
-
-    console.log("Villa.js server listening at http: //%s:%s", host, port)
-});
-var admin = admin.listen(config.adminPort, function () {
-    var adminH = admin.address().address
-    var adminP = admin.address().port
-    console.log("Admin application listening at http://%s:%s", adminH, adminP);
-});
-
-
-//routes
-app.get('/users', function (req, res) {
-    console.log('get request to root');
-});
-
-app.post('/users', function (req, res) {
-    myEmiter.emit('postEvent');
-});
-
-app.get('/workers/motion/', function (req, res) {
-    var query = req.query;
-    var zone = query.zone;
-
-    console.log(new Date().toLocaleString() +
-        "  :  Motion detected at zone: " + zone);
-})
-
-app.get('/workers/power', function (req, res) {
-    var query = req.query;
-    var data = query.data;
-    var decrypted = decrypt(data);
-    var clientObj = JSON.parse(decrypt(query.data));
-    //console.log("clientObj: " + clientObj);
-    clientObj.ip = "10.10.10.10"; //req.connection.remoteAddress;
-    myEmiter.emit('clientAliveEvent', clientObj);
-    res.statusCode = 200;
-    res.send('ok');
-});
-
 
 // Events
 myEmiter.on('postEvent', function () {

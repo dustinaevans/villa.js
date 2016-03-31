@@ -58,13 +58,13 @@ module.exports = function () {
     ));
 
     //listeners
-    var server = app.listen(8001, function () {
+    var server = app.listen(config.appPort, function () {
         var host = server.address().address
         var port = server.address().port
 
         console.log("Villa.js server listening at http: //%s:%s", host, port)
     });
-    var admin = admin.listen(8002, function () {
+    var admin = admin.listen(config.adminPort, function () {
         var adminH = admin.address().address
         var adminP = admin.address().port
         console.log("Admin application listening at http://%s:%s", adminH, adminP);
